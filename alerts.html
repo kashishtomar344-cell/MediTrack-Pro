@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Alerts | MediTrack Pro{% endblock %}
+{% block breadcrumb %}Expiry & stock alerts{% endblock %}
+{% block content %}
+<section class="page-heading"><div><div class="eyebrow">MONITOR YOUR INVENTORY</div><h1>Expiry & stock alerts</h1><p>Records that may need an inventory review.</p></div><a class="btn btn-primary" href="{{ url_for('add_medicine') }}">＋ Add medicine</a></section>
+<section class="panel inventory-full">
+  <div class="panel-heading"><div><h3>Attention list</h3><p>Expired, expiring soon or low-stock records</p></div><span class="alert-count">{{ medicines|length }} items</span></div>
+  <div class="table-scroll"><table><thead><tr><th>MEDICINE</th><th>QUANTITY</th><th>EXPIRY DATE</th><th>EXPIRY STATUS</th><th>STOCK</th></tr></thead><tbody>
+  {% for m in medicines %}
+  <tr><td><div class="medicine-cell"><span class="medicine-symbol">✚</span><div><strong>{{ m.name }}</strong><small>{{ m.person }}</small></div></div></td><td>{{ m.quantity }} units</td><td>{{ m.expiry_date }}</td><td><span class="badge {{ 'badge-red' if m.status == 'Expired' else ('badge-amber' if m.status == 'Expiring soon' else 'badge-green') }}">{{ m.status }}</span></td><td>{% if m.quantity <= 5 %}<span class="badge badge-amber">Low stock</span>{% else %}<span class="muted">Normal</span>{% endif %}</td></tr>
+  {% else %}<tr><td colspan="5" class="empty-state">No alerts right now.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+<div class="disclaimer">Alerts are based only on the dates and quantities entered by the user. They do not confirm medicine safety or recommend taking a medicine.</div>
+{% endblock %}

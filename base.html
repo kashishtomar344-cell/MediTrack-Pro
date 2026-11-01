@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MediTrack Pro{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-icon">✚</span><span>MediTrack <small>PRO</small></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav>
+      <a class="{% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><span>▦</span> Overview</a>
+      <a class="{% if request.endpoint == 'medicines' %}active{% endif %}" href="{{ url_for('medicines') }}"><span>▤</span> Medicine inventory</a>
+      <a class="{% if request.endpoint == 'alerts' %}active{% endif %}" href="{{ url_for('alerts') }}"><span>◉</span> Expiry & stock alerts</a>
+    </nav>
+    <div class="sidebar-note">
+      <div class="note-icon">✦</div>
+      <strong>Stay organised</strong>
+      <p>Keep your household medicine records up to date.</p>
+    </div>
+    <div class="sidebar-footer">MEDITRACK PRO <span>•</span> VERSION 1.0</div>
+  </aside>
+  <main class="main-area">
+    <header class="topbar">
+      <div class="mobile-brand">✚ MediTrack Pro</div>
+      <div class="breadcrumb">Workspace <span>/</span> {% block breadcrumb %}Overview{% endblock %}</div>
+      <div class="top-user"><span class="avatar">A</span><span>Admin account</span></div>
+    </header>
+    <div class="page-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+      <footer class="footer">MediTrack Pro <span>•</span> Smart Medicine Inventory & Expiry Management</footer>
+    </div>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }} | MediTrack Pro{% endblock %}
+{% block breadcrumb %}{{ page_title }}{% endblock %}
+{% block content %}
+<section class="page-heading"><div><div class="eyebrow">INVENTORY MANAGEMENT</div><h1>{{ page_title }}</h1><p>Enter the details below to keep your medicine records organised.</p></div><a class="btn btn-light" href="{{ url_for('medicines') }}">← Back to inventory</a></section>
+<section class="form-layout">
+  <form class="panel medicine-form" method="post">
+    <div class="form-section-title"><span>01</span><div><h3>Medicine details</h3><p>Basic information about the item</p></div></div>
+    <div class="form-grid">
+      <label class="field full">Medicine name <b>*</b><input name="name" required maxlength="100" placeholder="e.g. Paracetamol" value="{{ medicine.get('name','') }}"></label>
+      <label class="field">Category <b>*</b><select name="category" required><option value="">Select category</option>{% for c in ['Tablet','Capsule','Syrup','Supplement','Other'] %}<option value="{{ c }}" {% if medicine.get('category') == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></label>
+      <label class="field">Quantity (units) <b>*</b><input type="number" name="quantity" min="0" required placeholder="e.g. 10" value="{{ medicine.get('quantity','') }}"></label>
+      <label class="field">Expiry date <b>*</b><input type="date" name="expiry_date" required value="{{ medicine.get('expiry_date','') }}"></label>
+      <label class="field">Family member <b>*</b><input name="person" required maxlength="80" placeholder="e.g. Family / Member name" value="{{ medicine.get('person','') }}"></label>
+      <label class="field full">Notes <textarea name="notes" rows="3" placeholder="Optional inventory notes">{{ medicine.get('notes','') }}</textarea></label>
+    </div>
+    <div class="form-actions"><a class="btn btn-light" href="{{ url_for('medicines') }}">Cancel</a><button class="btn btn-primary" type="submit">Save medicine →</button></div>
+  </form>
+  <aside class="form-tip"><div class="tip-icon">✦</div><h3>Helpful reminder</h3><p>Enter the expiry date exactly as printed on the medicine packaging. MediTrack uses this date to calculate inventory alerts.</p><div class="tip-line"></div><strong>Record keeping tip</strong><p>Review your saved information regularly and follow the advice of a qualified pharmacist or healthcare professional about medicines.</p></aside>
+</section>
+{% endblock %}

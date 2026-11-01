@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Inventory | MediTrack Pro{% endblock %}
+{% block breadcrumb %}Medicine inventory{% endblock %}
+{% block content %}
+<section class="page-heading"><div><div class="eyebrow">YOUR RECORDS</div><h1>Medicine inventory</h1><p>Manage and review the medicines saved in your cabinet.</p></div><a class="btn btn-primary" href="{{ url_for('add_medicine') }}">＋ Add medicine</a></section>
+<section class="panel inventory-full">
+  <form class="toolbar" method="get" action="{{ url_for('medicines') }}">
+    <div class="search-box"><span>⌕</span><input name="q" value="{{ q }}" placeholder="Search medicine or family member..."></div>
+    <select name="category"><option value="">All categories</option>{% for c in ['Tablet','Capsule','Syrup','Supplement','Other'] %}<option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select>
+    <button class="btn btn-dark" type="submit">Apply filters</button><a class="btn btn-light" href="{{ url_for('medicines') }}">Reset</a>
+  </form>
+  <div class="table-scroll"><table><thead><tr><th>MEDICINE</th><th>CATEGORY</th><th>QUANTITY</th><th>EXPIRY DATE</th><th>PERSON</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody>
+  {% for m in medicines %}
+    <tr><td><div class="medicine-cell"><span class="medicine-symbol">✚</span><div><strong>{{ m.name }}</strong><small>ID #{{ m.id }}</small></div></div></td><td>{{ m.category }}</td><td>{{ m.quantity }} units</td><td>{{ m.expiry_date }}</td><td>{{ m.person }}</td><td><span class="badge {{ 'badge-red' if m.status == 'Expired' else ('badge-amber' if m.status == 'Expiring soon' else 'badge-green') }}">{{ m.status }}</span></td><td><div class="actions"><a href="{{ url_for('edit_medicine', medicine_id=m.id) }}">Edit</a><form method="post" action="{{ url_for('delete_medicine', medicine_id=m.id) }}" onsubmit="return confirm('Delete this medicine record?')"><button class="delete-link" type="submit">Delete</button></form></div></td></tr>
+  {% else %}<tr><td colspan="7" class="empty-state">No matching medicine records found.</td></tr>{% endfor %}
+  </tbody></table></div>
+  <div class="table-bottom">Showing {{ medicines|length }} medicine record(s)</div>
+</section>
+<div class="disclaimer">Keep medicine records accurate. Expiry status is calculated from the date entered and is not a medical safety assessment.</div>
+{% endblock %}
